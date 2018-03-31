@@ -1,0 +1,7 @@
+1 2 3 8 4 7 6 5
+
+1 2 3 4 8 6 7 5 -> Solvable
+Even Inversions (2)
+
+1 2 3 4 8 7 6 5 -> Unsolvable
+Odd Inversions (1)
