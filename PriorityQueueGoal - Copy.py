@@ -8,15 +8,15 @@ node = {'1,1': ' ',  # 1
         '3,2': ' ',  # 6
         '3,3': ' '}  # 5
 
-goal = {'1,1': ' ',  # 1
-        '1,2': ' ',  # 2
-        '1,3': ' ',  # 3
-        '2,1': ' ',  # 8
+goal = {'1,1': '1',  # 1
+        '1,2': '2',  # 2
+        '1,3': '3',  # 3
+        '2,1': '8',  # 8
         '2,2': ' ',  # NULL
-        '2,3': ' ',  # 4
-        '3,1': ' ',  # 7
-        '3,2': ' ',  # 6
-        '3,3': ' '}  # 5
+        '2,3': '4',  # 4
+        '3,1': '7',  # 7
+        '3,2': '6',  # 6
+        '3,3': '5'}  # 5
 
 
 nodes = [] #PRIORITY QUEUE: TAKES TUPLES OF (GRID, DEPTH, SCORE, NODEID, PARENTID)
@@ -48,13 +48,13 @@ class NodeChildren:
         print("Manhattan Distance = " + str(node[2]-node[1]) + "\n----------------------------") #MANHATTAN DIST. = SCORE - DEPTH
         #print("Misplaced Tile Distance + Depth = " + str(miscost))
 
-    def RootScan(self, goal):
+    def RootScan(self):
         global nodeID
         for i in range(1, 4):
             for j in range(1, 4):
                 node[str(i) + ',' + str(j)] = input()
         print('')
-        mancost, miscost = self.ComputeCost(node, 0, goal)
+        mancost, miscost = self.ComputeCost(node, 0)
         nodes.append((node, 0, mancost, nodeID, None))
         nodeID += 1
         return node
@@ -65,7 +65,7 @@ class NodeChildren:
                 goal[str(i) + ',' + str(j)] = input()
         return goal
 
-    def ComputeCost(self, node, depth, goal):
+    def ComputeCost(self, node, depth):
         global goalFound
         miscost, mancost = 0, 0
         for i in range(1, 4):
@@ -99,11 +99,11 @@ class NodeChildren:
     def ProcessChild(self, grid, currDepth, parentID):
         if self.CheckVisited(grid) is False:
             global nodeID
-            mancost, miscost = self.ComputeCost(grid, currDepth+1, goal)
+            mancost, miscost = self.ComputeCost(grid, currDepth+1)
             nodes.append((grid, currDepth+1, mancost, nodeID, parentID)) #STITCH A NEW CHILD
             nodeID += 1
 
-    def FindChildren(self, parent, goal):
+    def FindChildren(self, parent):
         #DEFINING DEPTH
         parent = nodes[0]
         currDepth = parent[1]
@@ -155,12 +155,12 @@ class NodeChildren:
 if __name__ == '__main__':
     #INITILAZING THE ROOT NODE
     Node = NodeChildren()
-    print("Enter your goal node values, each in a line: ")
-    goal = Node.GoalScan()
-    print("Enter your root node values, each in a line: ")
-    node = Node.RootScan(goal)
+    #print("Enter your goal node values: ")
+    #goal = Node.GoalScan()
+    print("Enter your root node values: ")
+    node = Node.RootScan()
     node = Node.FindNewMin()
-    Node.FindChildren(node, goal )
+    Node.FindChildren(node)
     
     # ----BEGIN ITERATING---- #
     iterations = 0
@@ -169,7 +169,7 @@ if __name__ == '__main__':
             print("Tree is unsolvable.")
             exit(0)
         node = Node.FindNewMin() #SORT THE QUEUE TO GET THE MINIMUM ON TOP
-        Node.FindChildren(node, goal)
+        Node.FindChildren(node)
         iterations+=1
 
     goal = Node.FindNewMin() #OBTAIN THE GOAL NODE IF FOUND
