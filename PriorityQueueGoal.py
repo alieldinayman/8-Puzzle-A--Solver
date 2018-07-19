@@ -18,6 +18,7 @@ goal = {'1,1': ' ',  # 1
         '3,2': ' ',  # 6
         '3,3': ' '}  # 5
 
+import time
 
 nodes = [] #PRIORITY QUEUE: TAKES TUPLES OF (GRID, DEPTH, SCORE, NODEID, PARENTID)
 visited = [] #VISITED NODES: TAKES TUPLES OF NODES THAT HAVE BEEN TRAVERSED FROM THE QUEUE
@@ -164,6 +165,7 @@ if __name__ == '__main__':
     
     # ----BEGIN ITERATING---- #
     iterations = 0
+    tick = time.time()
     while goalFound is False:
         if iterations >= 1000:
             print("Tree is unsolvable.")
@@ -171,7 +173,7 @@ if __name__ == '__main__':
         node = Node.FindNewMin() #SORT THE QUEUE TO GET THE MINIMUM ON TOP
         Node.FindChildren(node, goal)
         iterations+=1
-
+    tock = time.time()
     goal = Node.FindNewMin() #OBTAIN THE GOAL NODE IF FOUND
 
     #MAKE THE PATH FROM ROOT TO GOAL
@@ -181,6 +183,7 @@ if __name__ == '__main__':
     print("Root Node: \n----------")
     for node in reversed(path):
         Node.NodePrint(node[3])
-
-    print("Moves to reach the Goal Node: " + str(goal[1])+ "\nNumber of Traversed Nodes: " + str(len(visited)))
+    print("Moves to reach the Goal Node: " + str(goal[1])+
+          "\nNumber of Traversed Nodes: " + str(len(visited))+
+          "\nTime elapsed by the algorithm: " + str(format(tock-tick, '0.3f')) + "s")
     
